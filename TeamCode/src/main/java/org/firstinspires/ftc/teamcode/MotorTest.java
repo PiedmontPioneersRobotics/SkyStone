@@ -58,6 +58,7 @@ public class MotorTest extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor motor = null;
 
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -67,6 +68,7 @@ public class MotorTest extends LinearOpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         motor = hardwareMap.get(DcMotor.class, "motor");
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();

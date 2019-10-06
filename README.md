@@ -7,7 +7,7 @@ v5.0 has also been posted to https://github.com/FIRST-Tech-Challenge/SkyStone wh
 Why are we doing this?  Git/GitHub is not designed to store large binary blobs.  As such the ftc_app repository has grown to over 1GB.  Not only does this violate GitHub's usage policies, but puts an undue burden on users of the repository when they download it.  For the foreseeable future a season specific version of the repository will be hosted at the url above.  Different approaches to prevent the size problem from recurring are being evaluated by the FTC Technology Team.  We realize that this creates a problem with teams that have maintained a history of software within the ftc_app workspace.  We appreciate your patience and understanding as work to migrate to a permanent solution.
 
 ## Welcome!
-This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
+This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition   To use this SDK, download/clone the entire project to your local computer.
 
 If you are new to the *FIRST* Tech Challenge software and control system, you should visit the online wiki to learn how to install, configure, and use the software and control system:
 
@@ -348,7 +348,7 @@ Version 3.10 (built on 17.05.09)
 
 This version of the software provides support for the REV Robotics Expansion Hub.  This version also includes improvements in the USB communication layer in an effort to enhance system resiliency.  If you were using a 2.x version of the software previously, updating to version 3.1 requires that you also update your Driver Station software in addition to updating the Robot Controller software.
 
-Also note that in version 3.10 software, the setMaxSpeed and getMaxSpeed methods are no longer available (not deprecated, they have been removed from the SDK). Also note that the the new 3.x software incorporates motor profiles that a user can select as he/she configures the robot.
+Also note that in version 3.10 software, the setMaxSpeed and getMaxSpeed methods are no longer available (not deprecated, they have been removed from the SDK). Also note that the the new 3.x software incorporates motor profiles that a user can select as he/she configures the
 
 Changes include:
  * Blocks changes
@@ -604,7 +604,7 @@ Version 2.00 (released on 16.08.19)
  * Inspection function has been integrated into the FTC Robot Controller and Driver Station Apps (Thanks Team HazMat… 9277 & 10650!).
  * Audio cues have been incorporated into FTC SDK.
  * Swap mechanism added to FTC Robot Controller configuration activity.  For example, if you have two motor controllers on a robot, and you misidentified them in your configuration file, you can use the Swap button to swap the devices within the configuration file (so you do not have to manually re-enter in the configuration info for the two devices).
- * Fix mechanism added to all user to replace an electronic module easily.  For example, suppose a servo controller dies on your robot. You replace the broken module with a new module, which has a different serial number from the original servo controller.  You can use the Fix button to automatically reconfigure your configuration file to use the serial number of the new module.
+ * Fix mechanism added to all user to replace an electronic module easily.  For example, suppose a servo controller dies on your  You replace the broken module with a new module, which has a different serial number from the original servo controller.  You can use the Fix button to automatically reconfigure your configuration file to use the serial number of the new module.
  * Improvements made to fix resiliency and responsiveness of the system.
  * For LinearOpMode the user now must for a telemetry.update() to update the telemetry data on the driver station.  This update() mechanism ensures that the driver station gets the updated data properly and at the same time.
  * The Auto Configure function of the Robot Controller is now template based.  If there is a commonly used robot configuration, a template can be created so that the Auto Configure mechanism can be used to quickly configure a robot of this type.

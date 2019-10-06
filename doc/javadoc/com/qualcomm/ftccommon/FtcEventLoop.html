@@ -515,7 +515,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
  It is important to save a copy of the event loop manager from this method, as that is how
  you'll get access to the gamepad.
  <p>
- If an Exception is thrown then the event loop manager will not start the robot.
+ If an Exception is thrown then the event loop manager will not start the
  <p>
  Caller synchronizes: called on RobotSetupRunnable.run() thread</div>
 <dl>
@@ -547,7 +547,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../com/qualcomm/robotcore/exception/RobotCoreException.html" title="class in com.qualcomm.robotcore.exception">RobotCoreException</a></code> - if a RobotCoreException is thrown, it will be handled
          by the event loop manager. The manager may decide to either stop processing
-         this iteration of the loop, or it may decide to shut down the robot.</dd>
+         this iteration of the loop, or it may decide to shut down the </dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#loop--"><code><p>
  Caller synchronizes: called on EventLoopRunnable.run() thread.</code></a></dd>
@@ -583,7 +583,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
                      java.lang.InterruptedException</pre>
 <div class="block">Teardown method
  <p>
- This method will be called when the robot is being shut down. This method should stop the robot. There will be no more changes to write
+ This method will be called when the robot is being shut down. This method should stop the  There will be no more changes to write
  to the hardware after this method is called.
  <p>
  If an exception is thrown, then the event loop manager will attempt to shut down the robot
