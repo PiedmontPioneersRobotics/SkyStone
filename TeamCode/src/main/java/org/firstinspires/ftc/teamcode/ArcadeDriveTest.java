@@ -93,7 +93,13 @@ public class ArcadeDriveTest extends LinearOpMode {
                  fineTune = 5;
 
              }
-
+            if(gamepad1.left_trigger != 0) {
+                robot.leftGrabber.setPower(0.3/fineTune);
+                robot.rightGrabber.setPower(0.3/fineTune);
+            } else{
+                robot.leftGrabber.setPower(0);
+                robot.rightGrabber.setPower(0);
+            }
             robot.leftDrive.setPower(leftPower/fineTune);
             robot.rightDrive.setPower(rightPower/fineTune);
 
