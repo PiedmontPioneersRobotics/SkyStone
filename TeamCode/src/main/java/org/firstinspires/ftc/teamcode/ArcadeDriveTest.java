@@ -53,27 +53,27 @@ public class ArcadeDriveTest extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    private Robot robot = new Robot();
     private int fineTune = 1;
 
 
 
     @Override
     public void runOpMode() {
+        robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        robot.leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        robot.rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when c onnected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        robot.leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        robot.rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -94,8 +94,8 @@ public class ArcadeDriveTest extends LinearOpMode {
 
              }
 
-            leftDrive.setPower(leftPower/fineTune);
-            rightDrive.setPower(rightPower/fineTune);
+            robot.leftDrive.setPower(leftPower/fineTune);
+            robot.rightDrive.setPower(rightPower/fineTune);
 
 
             // Show the elapsed game time and wheel power.
