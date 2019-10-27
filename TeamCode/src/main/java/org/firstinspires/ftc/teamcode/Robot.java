@@ -83,6 +83,7 @@ public class Robot
         rightDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         leftGrabber.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         rightGrabber.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+//        robot.leftDrive.setDirection(DcMotor.Direction.REVERSE);
 
 
         // Set all motors to zero power

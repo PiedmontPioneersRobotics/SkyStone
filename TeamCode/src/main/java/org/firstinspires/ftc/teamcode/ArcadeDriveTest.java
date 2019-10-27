@@ -72,8 +72,6 @@ public class ArcadeDriveTest extends LinearOpMode {
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when c onnected directly to the battery
-        robot.leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        robot.rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -96,7 +94,10 @@ public class ArcadeDriveTest extends LinearOpMode {
             if(gamepad1.left_trigger != 0) {
                 robot.leftGrabber.setPower(0.3/fineTune);
                 robot.rightGrabber.setPower(0.3/fineTune);
-            } else{
+            } else if (gamepad1.right_trigger !=0){
+                robot.leftGrabber.setPower(-0.3/fineTune);
+                robot.rightGrabber.setPower(-0.3/fineTune);
+            } else {
                 robot.leftGrabber.setPower(0);
                 robot.rightGrabber.setPower(0);
             }
