@@ -100,5 +100,6 @@ public class Robot
         rightGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
+
  }
 
