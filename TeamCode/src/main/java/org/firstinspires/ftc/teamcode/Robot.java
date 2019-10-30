@@ -77,27 +77,27 @@ public class Robot
         // Define and Initialize Motors
         leftDrive  = hwMap.get(DcMotor.class, "left_drive");
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
-        leftGrabber    = hwMap.get(DcMotor.class, "left_grabber");
-        rightGrabber    = hwMap.get(DcMotor.class, "right_grabber");
+//        leftGrabber    = hwMap.get(DcMotor.class, "left_grabber");
+//        rightGrabber    = hwMap.get(DcMotor.class, "right_grabber");
         leftDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-        leftGrabber.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        rightGrabber.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+//        leftGrabber.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+//        rightGrabber.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 //        robot.leftDrive.setDirection(DcMotor.Direction.REVERSE);
 
 
         // Set all motors to zero power
         leftDrive.setPower(0);
         rightDrive.setPower(0);
-        leftGrabber.setPower(0);
-        rightGrabber.setPower(0);
+//        leftGrabber.setPower(0);
+//        rightGrabber.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        leftGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        rightGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
