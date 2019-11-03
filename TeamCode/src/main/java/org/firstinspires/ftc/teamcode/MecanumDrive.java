@@ -49,7 +49,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp(name="ArcadeDriveTest", group="Linear Opmode")
-public class ArcadeDriveTest extends LinearOpMode {
+public class MecanumDrive extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -67,8 +67,7 @@ public class ArcadeDriveTest extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        robot.leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        robot.rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when c onnected directly to the battery
@@ -81,16 +80,18 @@ public class ArcadeDriveTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
-             leftPower = gamepad1.left_stick_y+gamepad1.left_stick_x;
-             rightPower = gamepad1.left_stick_y-gamepad1.left_stick_x;
-             if (gamepad1.a) {
-                 fineTune = 1;
-             } else if (gamepad1.b){
-                 fineTune = 5;
+            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+            double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+            double rightX = gamepad1.right_stick_x;
+            final double v1 = r * Math.cos(robotAngle) + rightX;
+            final double v2 = r * Math.sin(robotAngle) - rightX;
+            final double v3 = r * Math.sin(robotAngle) + rightX;
+            final double v4 = r * Math.cos(robotAngle) - rightX;
 
-             }
+            robot.leftFront.setPower(v1);
+            robot.rightFront.setPower(v2);
+            robot.leftBack.setPower(v3);
+            robot.rightBack.setPower(v4);
             if(gamepad1.left_trigger != 0) {
                 robot.leftGrabber.setPower(0.3/fineTune);
                 robot.rightGrabber.setPower(0.3/fineTune);
@@ -101,13 +102,12 @@ public class ArcadeDriveTest extends LinearOpMode {
                 robot.leftGrabber.setPower(0);
                 robot.rightGrabber.setPower(0);
             }
-            robot.leftDrive.setPower(leftPower/fineTune);
-            robot.rightDrive.setPower(rightPower/fineTune);
 
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Motors", "leftFront (%.2f), rightFront (%.2f),", robot.leftFront.getPower(), robot.rightFront.getPower());
+            telemetry.addData("Motors", "leftBack (%.2f), rightBack (%.2f),", robot.leftBack.getPower(), robot.rightBack.getPower());
             telemetry.update();
         }
     }
