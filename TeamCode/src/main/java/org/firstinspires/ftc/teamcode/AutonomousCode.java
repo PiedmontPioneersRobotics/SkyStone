@@ -120,8 +120,7 @@ public class AutonomousCode extends LinearOpMode {
             gyroDrive(0.5, 20, 0);
         } else if (autoNum == 2) {
             //drive to the block
-            // turn on the spinny thing
-            // turn off the spinny thing
+            // use yoink(?, ?, ?) to intake blocks
             // drive to the other side
             // put the block where it goes
 
@@ -355,4 +354,11 @@ public class AutonomousCode extends LinearOpMode {
         return Range.clip(error * PCoeff, -1, 1);
     }
 
+    public void yoink(long duration, double speed){
+        robot.leftGrabber.setPower(speed);
+        robot.rightGrabber.setPower(speed);
+        sleep(duration*1000);
+        robot.leftGrabber.setPower(0);
+        robot.rightGrabber.setPower(0);
+    }
 }
