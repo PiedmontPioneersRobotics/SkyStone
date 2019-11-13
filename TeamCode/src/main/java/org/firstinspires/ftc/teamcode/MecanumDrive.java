@@ -80,7 +80,7 @@ public class MecanumDrive extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+            double r = -Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
             double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
             double rightX = gamepad1.right_stick_x;
             final double v1 = r * Math.cos(robotAngle) + rightX;
