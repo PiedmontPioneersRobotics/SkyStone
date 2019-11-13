@@ -58,8 +58,9 @@ public class Robot
     public DcMotor  rightFront  = null;
     public DcMotor  leftBack   = null;
     public DcMotor  rightBack  = null;
-    public DcMotor  leftGrabber     = null;
-    public DcMotor  rightGrabber     = null;
+    //public DcMotor  leftGrabber     = null;
+    //public DcMotor  rightGrabber     = null;
+    public DcMotor grabber = null;
 
 
     /* local OpMode members. */
@@ -79,12 +80,13 @@ public class Robot
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack  = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
-        leftGrabber  = hwMap.get(DcMotor.class, "left_grabber");
-        rightGrabber = hwMap.get(DcMotor.class, "right_grabber");
+        // leftGrabber  = hwMap.get(DcMotor.class, "left_grabber");
+        // rightGrabber = hwMap.get(DcMotor.class, "right_grabber");
+        grabber = hwMap.get(DcMotor.class, "Grabber");
 //        leftGrabber    = hwMap.get(DcMotor.class, "left_grabber");
 //        rightGrabber    = hwMap.get(DcMotor.class, "right_grabber");
         leftFront.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        rightFront.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        rightFront.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         leftBack.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightBack.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 //        leftGrabber.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors

@@ -71,7 +71,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="GyroDrive")
+@Autonomous(name="mainAutonomous")
 //@Disabled
 public class AutonomousCode extends LinearOpMode {
 
@@ -107,9 +107,11 @@ public class AutonomousCode extends LinearOpMode {
         /*
         0 is code for the Depot side onto the midline
         1 is code for the Foundation side onto the midline
+        2 is code to take 1 block across the bridge, from Depot side
+        3 is code to drive 1 meter (For tests)
          */
 
-        int autoNum = 0;
+        int autoNum = 2;
         if (autoNum == 0) {
             gyroDrive(0.5, 20, 0);
             gyroTurn(0.3, 90);
@@ -119,12 +121,15 @@ public class AutonomousCode extends LinearOpMode {
             gyroTurn(0.3, -90);
             gyroDrive(0.5, 20, 0);
         } else if (autoNum == 2) {
-            //drive to the block
-            // use yoink(?, ?, ?) to intake blocks
-            // drive to the other side
-            // put the block where it goes
+            gyroDrive(0.5,100,0);
+            yoink(1, 0.25);
+            gyroDrive(-0.5, 100, 0);
+            yoink(1,-1);
 
+        } else if (autoNum == 3){
+            gyroDrive(0.5, 100, 0);
         }
+
     }
 
 
@@ -340,6 +345,7 @@ public class AutonomousCode extends LinearOpMode {
         // calculate error in -179 to +180 range  (
         robotError = targetAngle - gyro.getIntegratedZValue();
         while (robotError > 180)  robotError -= 360;
+        //useless comment
         while (robotError <= -180) robotError += 360;
         return robotError;
     }
@@ -355,10 +361,12 @@ public class AutonomousCode extends LinearOpMode {
     }
 
     public void yoink(long duration, double speed){
-        robot.leftGrabber.setPower(speed);
-        robot.rightGrabber.setPower(speed);
+        robot.grabber.setPower(0);
         sleep(duration*1000);
-        robot.leftGrabber.setPower(0);
-        robot.rightGrabber.setPower(0);
+        robot.grabber.setPower(0);
+    }
+
+    public void strafe(double speed, double distance) {
+
     }
 }

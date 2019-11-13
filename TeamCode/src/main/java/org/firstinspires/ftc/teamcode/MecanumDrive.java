@@ -93,14 +93,11 @@ public class MecanumDrive extends LinearOpMode {
             robot.leftBack.setPower(v3);
             robot.rightBack.setPower(v4);
             if(gamepad1.left_trigger != 0) {
-                robot.leftGrabber.setPower(0.3/fineTune);
-                robot.rightGrabber.setPower(0.3/fineTune);
+                robot.grabber.setPower(0.3/fineTune);
             } else if (gamepad1.right_trigger !=0){
-                robot.leftGrabber.setPower(-0.3/fineTune);
-                robot.rightGrabber.setPower(-0.3/fineTune);
+                robot.grabber.setPower(-0.3/fineTune);
             } else {
-                robot.leftGrabber.setPower(0);
-                robot.rightGrabber.setPower(0);
+                robot.grabber.setPower(0);
             }
 
 
