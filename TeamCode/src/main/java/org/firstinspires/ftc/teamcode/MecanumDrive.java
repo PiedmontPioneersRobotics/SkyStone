@@ -99,6 +99,16 @@ public class MecanumDrive extends LinearOpMode {
             } else {
                 robot.grabber.setPower(0);
             }
+            if(gamepad1.left_bumper) {
+                robot.leftLifter.setPower(0.5);
+                robot.rightLifter.setPower(0.5);
+            } else if(gamepad1.right_bumper) {
+                robot.leftLifter.setPower(-0.5);
+                robot.rightLifter.setPower(-0.5);
+            } else {
+                robot.leftLifter.setPower(0);
+                robot.rightLifter.setPower(0);
+            }
 
 
             // Show the elapsed game time and wheel power.
