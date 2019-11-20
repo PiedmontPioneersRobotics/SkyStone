@@ -110,14 +110,28 @@ public class AutonomousCode extends LinearOpMode {
         2 is code to take 1 block across the bridge, from Depot side
         3 is code to drive 1 meter (For tests)
          */
+        telemetry.log().add("Gyro Calibrating. Do Not Move!");
+        gyro.calibrate();
+        // Wait until the gyro calibration is complete
+        while (!isStopRequested() && gyro.isCalibrating())  {
+            sleep(50);
+        }
 
+        telemetry.log().clear(); telemetry.log().add("Gyro Calibrated. Press Start.");
+        telemetry.clear(); telemetry.update();
+
+        // Wait for the start button to be pressed
+        waitForStart();
+        telemetry.log().clear();
         int autoNum = 0;
         if (autoNum == 0) {
             gyroDrive(0.5, 20, 0);
-            strafe(0.5,20);
+            gyroTurn(0.3, 90);
+            gyroDrive(0.5, 20, 0);
         } else if(autoNum == 1){
             gyroDrive(0.5, 20, 0);
-            strafe(0.5,20);
+            gyroTurn(0.3, -90);
+            gyroDrive(0.5, 20, 0);
         } else if (autoNum == 2) {
             gyroDrive(0.5,100,0);
             yoink(1, 0.25);
