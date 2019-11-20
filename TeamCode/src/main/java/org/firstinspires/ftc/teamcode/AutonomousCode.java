@@ -111,15 +111,13 @@ public class AutonomousCode extends LinearOpMode {
         3 is code to drive 1 meter (For tests)
          */
 
-        int autoNum = 2;
+        int autoNum = 0;
         if (autoNum == 0) {
             gyroDrive(0.5, 20, 0);
-            gyroTurn(0.3, 90);
-            gyroDrive(0.5, 20, 0);
+            strafe(0.5,20);
         } else if(autoNum == 1){
             gyroDrive(0.5, 20, 0);
-            gyroTurn(0.3, -90);
-            gyroDrive(0.5, 20, 0);
+            strafe(0.5,20);
         } else if (autoNum == 2) {
             gyroDrive(0.5,100,0);
             yoink(1, 0.25);
@@ -361,12 +359,99 @@ public class AutonomousCode extends LinearOpMode {
     }
 
     public void yoink(long duration, double speed){
-        robot.grabber.setPower(0);
+        robot.grabber.setPower(speed);
         sleep(duration*1000);
         robot.grabber.setPower(0);
     }
 
-    public void strafe(double speed, double distance) {
+    public void strafe ( double speed,
+                            double distance) {
+        double  angle;
+        int     newLeftTarget;
+        int     newRightTarget;
+        int     moveCounts;
+        double  max;
+        double  error;
+        double  steer;
+        double  leftSpeed;
+        double  rightSpeed;
 
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+            // Determine new target position, and pass to motor controller
+            angle = 0;
+            moveCounts = (int)(distance * COUNTS_PER_INCH);
+            newLeftTarget = robot.leftFront.getCurrentPosition() + moveCounts;
+            newRightTarget = robot.rightFront.getCurrentPosition() + moveCounts;
+
+            // Set Target and Turn On RUN_TO_POSITION
+            robot.leftFront.setTargetPosition(newLeftTarget);
+            robot.rightFront.setTargetPosition(newRightTarget);
+            robot.leftBack.setTargetPosition(newLeftTarget);
+            robot.rightBack.setTargetPosition(newRightTarget);
+
+            robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // start motion.
+            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+            robot.leftFront.setPower(speed);
+            robot.rightFront.setPower(speed);
+            robot.leftBack.setPower(-speed);
+            robot.rightBack.setPower(-speed);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    (robot.leftFront.isBusy() && robot.rightFront.isBusy() && robot.leftBack.isBusy() && robot.rightBack.isBusy())) {
+
+                // adjust relative speed based on heading error.
+                error = getError(angle);
+                steer = getSteer(error, P_DRIVE_COEFF);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distance < 0)
+                    steer *= -1.0;
+
+                leftSpeed = speed - steer;
+                rightSpeed = speed + steer;
+
+                // Normalize speeds if either one exceeds +/- 1.0;
+                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+                if (max > 1.0)
+                {
+                    leftSpeed /= max;
+                    rightSpeed /= max;
+                }
+
+                robot.leftFront.setPower(leftSpeed);
+                robot.rightFront.setPower(rightSpeed);
+                robot.leftBack.setPower(leftSpeed);
+                robot.rightBack.setPower(rightSpeed);
+
+                // Display drive status for the driver.
+                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
+                telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
+                telemetry.addData("Actual",  "%7d:%7d:%7d:%7d",      robot.leftFront.getCurrentPosition(),
+                        robot.rightFront.getCurrentPosition(),
+                        robot.leftBack.getCurrentPosition(),
+                        robot.rightBack.getCurrentPosition());
+                telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            robot.leftFront.setPower(0);
+            robot.rightFront.setPower(0);
+            robot.leftBack.setPower(0);
+            robot.rightBack.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
     }
 }
