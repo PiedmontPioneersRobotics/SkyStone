@@ -126,20 +126,10 @@ public class AutonomousCode extends LinearOpMode {
         int autoNum = 0;
         if (autoNum == 0) {
             gyroDrive(0.5, 20, 0);
-            gyroTurn(0.3, 90);
-            gyroDrive(0.5, 20, 0);
+            strafe(0.5,20);
         } else if(autoNum == 1){
             gyroDrive(0.5, 20, 0);
-            gyroTurn(0.3, -90);
-            gyroDrive(0.5, 20, 0);
-        } else if (autoNum == 2) {
-            gyroDrive(0.5,100,0);
-            yoink(1, 0.25);
-            gyroDrive(-0.5, 100, 0);
-            yoink(1,-1);
-
-        } else if (autoNum == 3){
-            gyroDrive(0.5, 100, 0);
+            strafe(-0.5,20);
         }
 
     }
