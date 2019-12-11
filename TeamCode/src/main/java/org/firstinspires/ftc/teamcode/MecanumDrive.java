@@ -58,11 +58,25 @@ public class MecanumDrive extends LinearOpMode {
 
 
 
+
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
+        robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -70,7 +84,7 @@ public class MecanumDrive extends LinearOpMode {
 
 
         // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when c onnected directly to the battery
+        // Reverse the motor that runs backwards when connected directly to the battery
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -97,23 +111,22 @@ public class MecanumDrive extends LinearOpMode {
             final double v2 = r * Math.sin(robotAngle) - rightX;
             final double v3 = r * Math.sin(robotAngle) + rightX;
             final double v4 = r * Math.cos(robotAngle) - rightX;
-
             robot.leftFront.setPower(v1/fineTune);
             robot.rightFront.setPower(v2/fineTune);
             robot.leftBack.setPower(v3/fineTune);
             robot.rightBack.setPower(v4/fineTune);
-            if(gamepad2.left_trigger != 0) {
+            if(gamepad1.left_trigger != 0) {
                 robot.grabber.setPower(0.3/fineTune);
-            } else if (gamepad2.right_trigger !=0){
+            } else if (gamepad1.right_trigger !=0){
                 robot.grabber.setPower(-0.3/fineTune);
             } else {
                 robot.grabber.setPower(0);
             }
 
-            if(gamepad2.left_bumper = true){
+            if(gamepad1.left_bumper == true){
                 robot.leftLifter.setPower(0.2/fineTune);
                 robot.rightLifter.setPower(0.2/fineTune);
-            } else if(gamepad2.right_bumper = true){
+            } else if(gamepad1.right_bumper == true){
                 robot.leftLifter.setPower(-0.2/fineTune);
                 robot.rightLifter.setPower(-0.2/fineTune);
             } else{
@@ -126,6 +139,10 @@ public class MecanumDrive extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "leftFront (%.2f), rightFront (%.2f),", robot.leftFront.getPower(), robot.rightFront.getPower());
             telemetry.addData("Motors", "leftBack (%.2f), rightBack (%.2f),", robot.leftBack.getPower(), robot.rightBack.getPower());
+            telemetry.addData("left front wheel", robot.leftFront.getCurrentPosition());
+            telemetry.addData("right front wheel", robot.rightFront.getCurrentPosition());
+            telemetry.addData("left back wheel", robot.leftBack.getCurrentPosition());
+            telemetry.addData("right back wheel", robot.rightBack.getCurrentPosition());
             telemetry.update();
         }
     }

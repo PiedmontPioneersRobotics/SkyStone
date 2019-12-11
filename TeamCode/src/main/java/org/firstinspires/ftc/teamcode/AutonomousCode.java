@@ -120,16 +120,36 @@ public class AutonomousCode extends LinearOpMode {
         telemetry.log().clear(); telemetry.log().add("Gyro Calibrated. Press Start.");
         telemetry.clear(); telemetry.update();
 
+        robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Wait for the start button to be pressed
         waitForStart();
         telemetry.log().clear();
-        int autoNum = 0;
+        int autoNum = 4;
         if (autoNum == 0) {
             gyroDrive(0.5, 20, 0);
             strafe(0.5,20);
         } else if(autoNum == 1){
             gyroDrive(0.5, 20, 0);
             strafe(-0.5,20);
+        } else if(autoNum == 2){
+            /*
+             strafe sideways 40 in
+             move forward ---- cm slowly while yoinking
+
+             */
+        } else if (autoNum == 3) {
+            gyroDrive(0.5,20,0);
+            gyroTurn(0.2,90);
+            gyroDrive(0.5,20,0);
+        } else if (autoNum == 4) {
+            gyroDrive(0.5,10,0);
         }
 
     }

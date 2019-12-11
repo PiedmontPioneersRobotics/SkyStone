@@ -109,6 +109,8 @@ public class Robot
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        leftGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        rightGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -116,4 +118,3 @@ public class Robot
     }
 
  }
-
