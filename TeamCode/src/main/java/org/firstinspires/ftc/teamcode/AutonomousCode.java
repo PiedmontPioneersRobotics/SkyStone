@@ -91,8 +91,8 @@ public class AutonomousCode extends LinearOpMode {
     static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
-    static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
+    static final double     P_TURN_COEFF            = 0.8;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.8;     // Larger is more responsive, but also less stable
 
 
     @Override
@@ -133,11 +133,11 @@ public class AutonomousCode extends LinearOpMode {
         telemetry.log().clear();
         int autoNum = 4;
         if (autoNum == 0) {
-            gyroDrive(0.5, 20, 0);
-            strafe(0.5,20);
+            gyroDrive(DRIVE_SPEED, 20, 0);
+            strafe(DRIVE_SPEED,20);
         } else if(autoNum == 1){
-            gyroDrive(0.5, 20, 0);
-            strafe(-0.5,20);
+            gyroDrive(DRIVE_SPEED, 20, 0);
+            strafe(-DRIVE_SPEED,20);
         } else if(autoNum == 2){
             /*
              strafe sideways 40 in
@@ -145,11 +145,13 @@ public class AutonomousCode extends LinearOpMode {
 
              */
         } else if (autoNum == 3) {
-            gyroDrive(0.5,20,0);
-            gyroTurn(0.2,90);
-            gyroDrive(0.5,20,0);
+            gyroDrive(DRIVE_SPEED,20,0);
+            gyroTurn(TURN_SPEED,90);
+            gyroDrive(DRIVE_SPEED,20,0);
         } else if (autoNum == 4) {
-            gyroDrive(0.5,10,0);
+            gyroDrive(DRIVE_SPEED,30,0);
+            gyroTurn(TURN_SPEED, -90);
+            gyroDrive(DRIVE_SPEED, 5, 0);
         }
 
     }
@@ -346,6 +348,10 @@ public class AutonomousCode extends LinearOpMode {
         robot.leftBack.setPower(leftSpeed);
         robot.rightBack.setPower(rightSpeed);
 
+        telemetry.addData("LeftFrontSpeed", robot.leftFront.getPower());
+        telemetry.addData("LeftBackSpeed", robot.leftBack.getPower());
+        telemetry.addData("RightFrontSpeed", robot.rightFront.getPower());
+        telemetry.addData("RightBackSpeed", robot.rightBack.getPower());
         // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);
         telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
