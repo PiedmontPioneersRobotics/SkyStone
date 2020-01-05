@@ -131,7 +131,7 @@ public class AutonomousCode extends LinearOpMode {
         // Wait for the start button to be pressed
         waitForStart();
         telemetry.log().clear();
-        int autoNum = 2;
+        int autoNum = 5;
         if (autoNum == 0) {
             gyroDrive(DRIVE_SPEED, 10, 0);
             strafe(DRIVE_SPEED,200);
@@ -153,6 +153,12 @@ public class AutonomousCode extends LinearOpMode {
             gyroDrive(DRIVE_SPEED,30,0);
             gyroTurn(TURN_SPEED, -90);
             gyroDrive(DRIVE_SPEED, 5, 0);
+        }else if(autoNum ==5){
+            robot.leftBack.setPower(1);
+            robot.rightBack.setPower(1);
+            robot.rightFront.setPower(1);
+            robot.leftFront.setPower(1);
+            sleep(10000);
         }
 
     }
