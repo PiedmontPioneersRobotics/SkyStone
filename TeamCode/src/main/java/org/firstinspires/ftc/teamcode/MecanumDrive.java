@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -104,17 +105,18 @@ public class MecanumDrive extends LinearOpMode {
 
             }
             // Setup a variable for each drive wheel to save power level for telemetry
-            double r = Math.hypot(-gamepad1.left_stick_x, -gamepad1.left_stick_y);
-            double robotAngle = Math.atan2(-gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI/4;
+            //Range.clip((()/fineTune), -1, 1)
+            double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
+            double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI/4;
             double rightX = gamepad1.right_stick_x;
-            final double v1 = r * Math.cos(robotAngle) + rightX;
-            final double v2 = r * Math.sin(robotAngle) - rightX;
-            final double v3 = r * Math.sin(robotAngle) + rightX;
-            final double v4 = r * Math.cos(robotAngle) - rightX;
-            robot.leftFront.setPower(v1/fineTune);
-            robot.rightFront.setPower(v2/fineTune);
-            robot.leftBack.setPower(v3/fineTune);
-            robot.rightBack.setPower(v4/fineTune);
+            final double leftFrontPower = Range.clip(((r * Math.cos(robotAngle) + rightX)/fineTune), -1, 1);
+            final double rightFrontPower = Range.clip(((r * Math.sin(robotAngle) - rightX)/fineTune), -1, 1);
+            final double leftBackPower = Range.clip(((r * Math.sin(robotAngle) + rightX)/fineTune), -1, 1);
+            final double rightBackPower = Range.clip(((r * Math.cos(robotAngle) - rightX)/fineTune), -1, 1);
+            robot.leftFront.setPower(leftFrontPower);
+            robot.rightFront.setPower(rightFrontPower);
+            robot.leftBack.setPower(leftBackPower);
+            robot.rightBack.setPower(rightBackPower);
             if(gamepad2.left_trigger != 0) {
                 robot.grabber.setPower(0.6/fineTune);
             } else if (gamepad2.right_trigger !=0){

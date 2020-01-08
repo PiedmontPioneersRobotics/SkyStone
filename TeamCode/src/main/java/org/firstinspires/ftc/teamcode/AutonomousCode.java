@@ -131,7 +131,7 @@ public class AutonomousCode extends LinearOpMode {
         // Wait for the start button to be pressed
         waitForStart();
         telemetry.log().clear();
-        int autoNum = 5;
+        int autoNum = 0;
         if (autoNum == 0) {
             gyroDrive(DRIVE_SPEED, 10, 0);
             strafe(DRIVE_SPEED,200);
@@ -422,8 +422,8 @@ public class AutonomousCode extends LinearOpMode {
             moveCounts = (int)(distance * COUNTS_PER_INCH);
             newLeftFrontTarget = robot.leftFront.getCurrentPosition() + moveCounts;
             newLeftBackTarget = robot.leftBack.getCurrentPosition() - moveCounts;
-            newRightFrontTarget = robot.rightFront.getCurrentPosition() - moveCounts;
-            newRightBackTarget = robot.rightBack.getCurrentPosition() + moveCounts;
+            newRightFrontTarget = robot.rightFront.getCurrentPosition() + moveCounts;
+            newRightBackTarget = robot.rightBack.getCurrentPosition() - moveCounts;
 
             // Set Target and Turn On RUN_TO_POSITION
             robot.leftFront.setTargetPosition(newLeftFrontTarget);
