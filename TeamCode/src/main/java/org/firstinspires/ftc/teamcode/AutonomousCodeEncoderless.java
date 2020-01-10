@@ -29,8 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.view.View;
-
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -71,9 +69,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="oldAutonomous")
+@Autonomous(name="mainAutonomous")
 //@Disabled
-public class AutonomousCode extends LinearOpMode {
+public class AutonomousCodeEncoderless extends LinearOpMode {
 
     /* Declare OpMode members. */
     Robot         robot   = new Robot();   // Use a Pushbot's hardware
@@ -131,7 +129,7 @@ public class AutonomousCode extends LinearOpMode {
         // Wait for the start button to be pressed
         waitForStart();
         telemetry.log().clear();
-        int autoNum = 0;
+        int autoNum = 6;
         if (autoNum == 0) {
             gyroDrive(DRIVE_SPEED, 10, 0);
             strafe(DRIVE_SPEED,200);
@@ -159,6 +157,9 @@ public class AutonomousCode extends LinearOpMode {
             robot.rightFront.setPower(1);
             robot.leftFront.setPower(1);
             sleep(10000);
+        }else if(autoNum ==6){
+            driveUsingDuration(DRIVE_SPEED, 1, 0);
+            driveUsingDuration(DRIVE_SPEED, 1, 90);
         }
 
     }
@@ -395,12 +396,68 @@ public class AutonomousCode extends LinearOpMode {
         return Range.clip(error * PCoeff, -1, 1);
     }
 
-    public void grabber(long duration, double power){
+    public void moveGrabber(long duration, double power){
         robot.grabber.setPower(power);
         sleep(duration*1000);
         robot.grabber.setPower(0);
     }
 
+    public void moveLifter(long duration, double power){
+        robot.leftLifter.setPower(power);
+        robot.rightLifter.setPower(power);
+        sleep(duration*1000);
+        robot.leftLifter.setPower(0);
+        robot.rightLifter.setPower(0);
+    }
+
+    public void driveWithoutEncoders (double speed, double distance, double strafeAngle){
+        //not currently usefull
+        double robotAngle = strafeAngle - Math.PI/4;
+
+        final double leftFrontPower = Range.clip((distance * Math.cos(robotAngle)), -1, 1);
+        final double rightFrontPower = Range.clip((distance * Math.sin(robotAngle)), -1, 1);
+        final double leftBackPower = Range.clip((distance * Math.sin(robotAngle)), -1, 1);
+        final double rightBackPower = Range.clip((distance * Math.cos(robotAngle)), -1, 1);
+
+        robot.leftFront.setPower(leftFrontPower);
+        robot.rightFront.setPower(rightFrontPower);
+        robot.leftBack.setPower(leftBackPower);
+        robot.rightBack.setPower(rightBackPower);
+
+        sleep(((long)(distance/speed) * 1000));
+
+        robot.leftFront.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightBack.setPower(0);
+    }
+
+    public void driveUsingDuration (double speed, double duration, double strafeAngle){
+
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double robotAngle = strafeAngle - Math.PI/4;
+
+        final double leftFrontPower = Range.clip((duration * Math.cos(robotAngle)), -1, 1);
+        final double rightFrontPower = Range.clip((duration * Math.sin(robotAngle)), -1, 1);
+        final double leftBackPower = Range.clip((duration * Math.sin(robotAngle)), -1, 1);
+        final double rightBackPower = Range.clip((duration * Math.cos(robotAngle)), -1, 1);
+
+        robot.leftFront.setPower(leftFrontPower);
+        robot.rightFront.setPower(rightFrontPower);
+        robot.leftBack.setPower(leftBackPower);
+        robot.rightBack.setPower(rightBackPower);
+
+        sleep((long)duration);
+
+        robot.leftFront.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightBack.setPower(0);
+    }
     public void strafe ( double speed,
                             double distance) {
         double  angle;
@@ -457,7 +514,7 @@ public class AutonomousCode extends LinearOpMode {
 //
 //                leftSpeed = speed - steer;
 //                rightSpeed = -(speed + steer);
-//
+//y
 //                // Normalize speeds if either one exceeds +/- 1.0;
 //                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
 //                if (max > 1.0)
@@ -489,6 +546,7 @@ public class AutonomousCode extends LinearOpMode {
             robot.rightBack.setPower(0);
 
             // Turn off RUN_TO_POSITION
+
             robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
