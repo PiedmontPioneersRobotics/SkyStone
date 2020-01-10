@@ -420,10 +420,10 @@ public class AutonomousCode extends LinearOpMode {
             // Determine new target position, and pass to motor controller
             angle = 0;
             moveCounts = (int)(distance * COUNTS_PER_INCH);
-            newLeftFrontTarget = robot.leftFront.getCurrentPosition() - moveCounts;
-            newLeftBackTarget = robot.leftBack.getCurrentPosition() + moveCounts;
-            newRightFrontTarget = robot.rightFront.getCurrentPosition() + moveCounts;
-            newRightBackTarget = robot.rightBack.getCurrentPosition() - moveCounts;
+            newLeftFrontTarget = robot.leftFront.getCurrentPosition() + moveCounts;
+            newLeftBackTarget = robot.leftBack.getCurrentPosition() - moveCounts;
+            newRightFrontTarget = robot.rightFront.getCurrentPosition() - moveCounts;
+            newRightBackTarget = robot.rightBack.getCurrentPosition() + moveCounts;
 
             // Set Target and Turn On RUN_TO_POSITION
             robot.leftFront.setTargetPosition(newLeftFrontTarget);
