@@ -131,7 +131,9 @@ public class AutonomousCode extends LinearOpMode {
         // Wait for the start button to be pressed
         waitForStart();
         telemetry.log().clear();
-        int autoNum = 0;
+
+        int autoNum = 6;
+
         if (autoNum == 0) {
             gyroDrive(DRIVE_SPEED, 10, 0);
             strafe(DRIVE_SPEED,200);
@@ -159,6 +161,9 @@ public class AutonomousCode extends LinearOpMode {
             robot.rightFront.setPower(1);
             robot.leftFront.setPower(1);
             sleep(10000);
+        }else if(autoNum == 6){
+            telemetry.addData("Running Code", autoNum);
+            smoothRampedEncoderlessRunToPosition(DRIVE_SPEED, 10, 0);
         }
 
     }
@@ -196,6 +201,7 @@ public class AutonomousCode extends LinearOpMode {
             moveCounts = (int)(distance * COUNTS_PER_INCH);
             newLeftTarget = robot.leftFront.getCurrentPosition() + moveCounts;
             newRightTarget = robot.rightFront.getCurrentPosition() + moveCounts;
+
 
             // Set Target and Turn On RUN_TO_POSITION
             robot.leftFront.setTargetPosition(newLeftTarget);
@@ -279,6 +285,142 @@ public class AutonomousCode extends LinearOpMode {
      *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *                   If a relative angle is required, add/subtract from current heading.
      */
+
+    public void rampedEncoderlessRunToPosition (double speed, double distance, int direction){
+        encoderlessRunToPosition (speed *.25, distance * .25, direction, true, false);
+        encoderlessRunToPosition(speed*0.5, distance * 0.25, direction, false, false);
+        encoderlessRunToPosition(speed, distance * 0.25, direction, false, false);
+        encoderlessRunToPosition(speed * 0.5, distance * 0.25, direction, false, true);
+
+    }
+    public void encoderlessRunToPosition (double speed, double distance, int direction, boolean smoothDriveStart, boolean smoothDriveEnd){
+
+        int moveCounts;
+
+        if(smoothDriveStart) {
+            robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if (direction == 0){
+            //forward/backwards
+            robot.leftFront.setPower(speed);
+            robot.leftBack.setPower(speed);
+            robot.rightFront.setPower(speed);
+            robot.rightBack.setPower(speed);
+        } else if(direction == 1){
+            // ?? Strafe
+            robot.leftFront.setPower(-speed);
+            robot.leftBack.setPower(speed);
+            robot.rightFront.setPower(-speed);
+            robot.rightBack.setPower(speed);
+        } else if (direction == 2){
+            // ?? Strafe
+            robot.leftFront.setPower(speed);
+            robot.leftBack.setPower(-speed);
+            robot.rightFront.setPower(speed);
+            robot.rightBack.setPower(-speed);
+        }
+
+        moveCounts = (int)(distance * COUNTS_PER_INCH);
+
+        while (opModeIsActive() && findLargestEncoderValue() < moveCounts){
+            //wait for motors to reach distance
+
+        }
+        if (smoothDriveEnd) {
+            robot.leftFront.setPower(0);
+            robot.leftBack.setPower(0);
+            robot.rightFront.setPower(0);
+            robot.rightBack.setPower(0);
+        }
+    }
+
+    public void smoothRampedEncoderlessRunToPosition (double speed, double distance, int direction){
+
+        int moveCounts;
+
+
+        robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
+
+        moveCounts = (int)(distance * COUNTS_PER_INCH);
+        double rampedSpeed = 0.2 * speed;
+
+        while (opModeIsActive() && findLargestEncoderValue() < moveCounts){
+            //wait for motors to reach distance
+
+            if(findLargestEncoderValue() + 1000 > moveCounts && rampedSpeed > 0.1 * speed){
+                rampedSpeed -= 0.01 * speed;
+            } else if(rampedSpeed < speed){
+                rampedSpeed += 0.01 * speed;
+            }
+            if (direction == 0){
+                //forward/backwards
+                robot.leftFront.setPower(rampedSpeed);
+                robot.leftBack.setPower(rampedSpeed);
+                robot.rightFront.setPower(rampedSpeed);
+                robot.rightBack.setPower(rampedSpeed);
+            } else if(direction == 1){
+                // ?? Strafe
+                robot.leftFront.setPower(-rampedSpeed);
+                robot.leftBack.setPower(rampedSpeed);
+                robot.rightFront.setPower(-rampedSpeed);
+                robot.rightBack.setPower(rampedSpeed);
+            } else if (direction == 2){
+                // ?? Strafe
+                robot.leftFront.setPower(rampedSpeed);
+                robot.leftBack.setPower(-rampedSpeed);
+                robot.rightFront.setPower(rampedSpeed);
+                robot.rightBack.setPower(-rampedSpeed);
+            }
+            telemetry.addData("Move Counts", moveCounts);
+
+        }
+
+        robot.leftFront.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.rightBack.setPower(0);
+
+    }
+    public int findLargestEncoderValue(){
+
+         int max = Math.abs(robot.leftBack.getCurrentPosition());
+         int encoderHolder = Math.abs(robot.leftFront.getCurrentPosition());
+
+
+        if (encoderHolder > max){
+            max = encoderHolder;
+        }
+        encoderHolder = Math.abs(robot.rightFront.getCurrentPosition());
+        if (encoderHolder > max){
+            max = encoderHolder;
+        }
+        encoderHolder = Math.abs(robot.rightBack.getCurrentPosition());
+        if (encoderHolder > max) {
+            max = encoderHolder;
+        }
+        return max;
+
+    }
     public void gyroTurn (  double speed, double angle) {
 
         // keep looping while we are still active, and not on heading.
@@ -400,6 +542,57 @@ public class AutonomousCode extends LinearOpMode {
         sleep(duration*1000);
         robot.grabber.setPower(0);
     }
+
+    public void driveWithoutEncoders (double speed, double distance, double strafeAngle){
+        //not currently usefull
+        double robotAngle = strafeAngle - Math.PI/4;
+
+        final double leftFrontPower = Range.clip((distance * Math.cos(robotAngle)), -1, 1);
+        final double rightFrontPower = Range.clip((distance * Math.sin(robotAngle)), -1, 1);
+        final double leftBackPower = Range.clip((distance * Math.sin(robotAngle)), -1, 1);
+        final double rightBackPower = Range.clip((distance * Math.cos(robotAngle)), -1, 1);
+
+        robot.leftFront.setPower(leftFrontPower);
+        robot.rightFront.setPower(rightFrontPower);
+        robot.leftBack.setPower(leftBackPower);
+        robot.rightBack.setPower(rightBackPower);
+
+        sleep(((long)(distance/speed) * 1000));
+
+        robot.leftFront.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightBack.setPower(0);
+    }
+
+    public void driveUsingDuration (double speed, double duration, double strafeAngle){
+
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double robotAngle = strafeAngle - Math.PI/4;
+
+        final double leftFrontPower = Range.clip((duration * Math.cos(robotAngle)), -1, 1);
+        final double rightFrontPower = Range.clip((duration * Math.sin(robotAngle)), -1, 1);
+        final double leftBackPower = Range.clip((duration * Math.sin(robotAngle)), -1, 1);
+        final double rightBackPower = Range.clip((duration * Math.cos(robotAngle)), -1, 1);
+
+        robot.leftFront.setPower(leftFrontPower);
+        robot.rightFront.setPower(rightFrontPower);
+        robot.leftBack.setPower(leftBackPower);
+        robot.rightBack.setPower(rightBackPower);
+
+        sleep((long)duration);
+
+        robot.leftFront.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightBack.setPower(0);
+    }
+
+
 
     public void strafe ( double speed,
                             double distance) {
