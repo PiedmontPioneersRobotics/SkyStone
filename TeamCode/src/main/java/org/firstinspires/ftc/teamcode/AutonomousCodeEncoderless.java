@@ -458,6 +458,9 @@ public class AutonomousCodeEncoderless extends LinearOpMode {
         robot.leftBack.setPower(0);
         robot.rightBack.setPower(0);
     }
+
+
+    
     public void strafe ( double speed,
                             double distance) {
         double  angle;
