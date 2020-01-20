@@ -91,8 +91,8 @@ public class AutonomousCode extends LinearOpMode {
     static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
-    static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
+    static final double     P_TURN_COEFF            = 1;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 1;   // Larger is more responsive, but also less stable
 
 
     @Override
@@ -132,11 +132,11 @@ public class AutonomousCode extends LinearOpMode {
         waitForStart();
         telemetry.log().clear();
 
-        int autoNum = 6;
+        int autoNum = 0;
 
         if (autoNum == 0) {
-            gyroDrive(DRIVE_SPEED, 10, 0);
-            strafe(DRIVE_SPEED,200);
+            gyroDrive(DRIVE_SPEED, 50, 0);
+//            strafe(DRIVE_SPEED,200);
         } else if(autoNum == 1){
             gyroDrive(DRIVE_SPEED, 20, 0);
             strafe(-DRIVE_SPEED,20);
@@ -164,6 +164,7 @@ public class AutonomousCode extends LinearOpMode {
         }else if(autoNum == 6){
             telemetry.addData("Running Code", autoNum);
             smoothRampedEncoderlessRunToPosition(DRIVE_SPEED, 10, 0);
+            smoothRampedEncoderlessRunToPosition(DRIVE_SPEED, 10, 1);
         }
 
     }
@@ -281,7 +282,7 @@ public class AutonomousCode extends LinearOpMode {
      *  2) Driver stops the opmode running.
      *
      * @param speed Desired speed of turn.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     // @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
      *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *                   If a relative angle is required, add/subtract from current heading.
      */
@@ -382,16 +383,17 @@ public class AutonomousCode extends LinearOpMode {
                 // ?? Strafe
                 robot.leftFront.setPower(-rampedSpeed);
                 robot.leftBack.setPower(rampedSpeed);
-                robot.rightFront.setPower(-rampedSpeed);
-                robot.rightBack.setPower(rampedSpeed);
+                robot.rightFront.setPower(rampedSpeed);
+                robot.rightBack.setPower(-rampedSpeed);
             } else if (direction == 2){
                 // ?? Strafe
                 robot.leftFront.setPower(rampedSpeed);
                 robot.leftBack.setPower(-rampedSpeed);
-                robot.rightFront.setPower(rampedSpeed);
-                robot.rightBack.setPower(-rampedSpeed);
+                robot.rightFront.setPower(-rampedSpeed);
+                robot.rightBack.setPower(rampedSpeed);
             }
             telemetry.addData("Move Counts", moveCounts);
+            telemetry.update();
 
         }
 
@@ -520,7 +522,7 @@ public class AutonomousCode extends LinearOpMode {
         double robotError;
 
         // calculate error in -179 to +180 range  (
-        robotError = targetAngle - gyro.getIntegratedZValue();
+        robotError = targetAngle + gyro.getIntegratedZValue();
         while (robotError > 180)  robotError -= 360;
         //useless comment
         while (robotError <= -180) robotError += 360;
@@ -537,10 +539,24 @@ public class AutonomousCode extends LinearOpMode {
         return Range.clip(error * PCoeff, -1, 1);
     }
 
-    public void yoink(long duration, double speed){
+    public void runGrabbers(long duration, double speed){
         robot.grabber.setPower(speed);
         sleep(duration*1000);
         robot.grabber.setPower(0);
+    }
+
+    public void grabBlock(){
+    /*
+        if(robot.rightLifter.getPosition()==0) {
+            robot.leftLifter.setPosition(1);
+            robot.rightLifter.setPosition(1);
+        }else if(robot.rightLifter.getPosition()==1){
+            robot.leftLifter.setPosition(0);
+            robot.rightLifter.setPosition(0);
+        }
+
+        runGrabbers(1, 0.5);
+        */
     }
 
     public void driveWithoutEncoders (double speed, double distance, double strafeAngle){
