@@ -125,18 +125,27 @@ public class MecanumDrive extends LinearOpMode {
                 robot.grabber.setPower(0);
             }
 
-            if(gamepad2.left_bumper == true){
+            if(gamepad2.left_bumper){
                 robot.leftLifter.setPower(0.2/fineTune);
                 robot.rightLifter.setPower(0.2/fineTune);
-            } else if(gamepad2.right_bumper == true){
+            } else if(gamepad2.right_bumper){
                 robot.leftLifter.setPower(-0.2/fineTune);
                 robot.rightLifter.setPower(-0.2/fineTune);
             } else{
                 robot.leftLifter.setPower(0);
                 robot.rightLifter.setPower(0);
             }
-
-
+            /* uncomment to use servos
+            if(gamepad2.left_bumper){//map to buttons when swapped to servos
+                if(robot.rightLifter.getPosition()==0) {
+                    robot.leftLifter.setPosition(1);
+                    robot.rightLifter.setPosition(1);
+                }else if(robot.rightLifter.getPosition()==1){
+                    robot.leftLifter.setPosition(0);
+                    robot.rightLifter.setPosition(0);
+                }
+            }
+*/
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "leftFront (%.2f), rightFront (%.2f),", robot.leftFront.getPower(), robot.rightFront.getPower());

@@ -59,8 +59,10 @@ public class Robot
     public DcMotor  leftBack   = null;
     public DcMotor  rightBack  = null;
     public DcMotor  grabber   = null;
-    public DcMotor  leftLifter = null;
-    public DcMotor  rightLifter = null;
+   // public DcMotor  leftLifter = null;
+    //public DcMotor  rightLifter = null;
+    public DcMotor leftLifter = null;
+    public DcMotor rightLifter = null;
 
 
     /* local OpMode members. */
@@ -81,16 +83,21 @@ public class Robot
         leftBack  = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
         grabber = hwMap.get(DcMotor.class, "grabber");
+
+        //Make Servos
         leftLifter = hwMap.get(DcMotor.class, "left_lifter");
         rightLifter = hwMap.get(DcMotor.class, "right_lifter");
+
 
 //        leftGrabber    = hwMap.get(DcMotor.class, "left_grabber");
 //        rightGrabber    = hwMap.get(DcMotor.class, "right_grabber");
         leftFront.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightFront.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        rightFront.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         leftBack.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightBack.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        //comment out if using servos
         leftLifter.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+
 
         grabber.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 //        rightGrabber.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
