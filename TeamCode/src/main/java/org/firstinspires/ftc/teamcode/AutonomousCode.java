@@ -91,8 +91,8 @@ public class AutonomousCode extends LinearOpMode {
     static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
-    static final double     P_TURN_COEFF            = 1;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 1;   // Larger is more responsive, but also less stable
+    static final double     P_TURN_COEFF            = 0.15;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.1;   // Larger is more responsive, but also less stable
 
 
     @Override
@@ -132,39 +132,34 @@ public class AutonomousCode extends LinearOpMode {
         waitForStart();
         telemetry.log().clear();
 
-        int autoNum = 0;
+        int autoNum = 3;
 
         if (autoNum == 0) {
-            gyroDrive(DRIVE_SPEED, 50, 0);
-//            strafe(DRIVE_SPEED,200);
+            /*
+            Drives forward 10 inches, use this for the parking.
+            Uses Encoders and Gyro.
+             */
+
+            gyroDrive(DRIVE_SPEED, 25, 0);
         } else if(autoNum == 1){
-            gyroDrive(DRIVE_SPEED, 20, 0);
-            strafe(-DRIVE_SPEED,20);
+            /*
+            Drives forward 50 inches, turns -90 degrees (USE POSITIVE INSTEAD), drives forward
+            another 10 inches.
+             */
+            gyroDrive(DRIVE_SPEED, 80, 0);
+            gyroTurn(TURN_SPEED, 90);
+            gyroDrive(DRIVE_SPEED, 40, 90);
+
         } else if(autoNum == 2){
             /*
              strafe sideways 40 in
              move forward ---- cm slowly while yoinking
 
              */
-            strafe(0.2, 10);
+//            strafe(0.2, 10);
         } else if (autoNum == 3) {
-            gyroDrive(DRIVE_SPEED,20,0);
-            gyroTurn(TURN_SPEED,90);
-            gyroDrive(DRIVE_SPEED,20,0);
-        } else if (autoNum == 4) {
-            gyroDrive(DRIVE_SPEED,30,0);
-            gyroTurn(TURN_SPEED, -90);
-            gyroDrive(DRIVE_SPEED, 5, 0);
-        }else if(autoNum ==5){
-            robot.leftBack.setPower(1);
-            robot.rightBack.setPower(1);
-            robot.rightFront.setPower(1);
-            robot.leftFront.setPower(1);
-            sleep(10000);
-        }else if(autoNum == 6){
-            telemetry.addData("Running Code", autoNum);
-            smoothRampedEncoderlessRunToPosition(DRIVE_SPEED, 10, 0);
-            smoothRampedEncoderlessRunToPosition(DRIVE_SPEED, 10, 1);
+            //strafe test
+            strafe(DRIVE_SPEED, 20, 0);
         }
 
     }
@@ -186,8 +181,10 @@ public class AutonomousCode extends LinearOpMode {
                             double distance,
                             double angle) {
 
-        int     newLeftTarget;
-        int     newRightTarget;
+        int     newLeftFrontTarget;
+        int     newRightFrontTarget;
+        int     newRightBackTarget;
+        int     newLeftBackTarget;
         int     moveCounts;
         double  max;
         double  error;
@@ -196,19 +193,22 @@ public class AutonomousCode extends LinearOpMode {
         double  rightSpeed;
 
         // Ensure that the opmode is still active
+        // grey
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
             moveCounts = (int)(distance * COUNTS_PER_INCH);
-            newLeftTarget = robot.leftFront.getCurrentPosition() + moveCounts;
-            newRightTarget = robot.rightFront.getCurrentPosition() + moveCounts;
+            newLeftFrontTarget = robot.leftFront.getCurrentPosition() + moveCounts;
+            newRightFrontTarget = robot.rightFront.getCurrentPosition() + moveCounts;
+            newLeftBackTarget = robot.leftBack.getCurrentPosition() + moveCounts;
+            newRightBackTarget = robot.rightBack.getCurrentPosition() + moveCounts;
 
 
             // Set Target and Turn On RUN_TO_POSITION
-            robot.leftFront.setTargetPosition(newLeftTarget);
-            robot.rightFront.setTargetPosition(newRightTarget);
-            robot.leftBack.setTargetPosition(newLeftTarget);
-            robot.rightBack.setTargetPosition(newRightTarget);
+            robot.leftFront.setTargetPosition(newLeftFrontTarget);
+            robot.rightFront.setTargetPosition(newRightFrontTarget);
+            robot.leftBack.setTargetPosition(newLeftBackTarget);
+            robot.rightBack.setTargetPosition(newRightBackTarget);
 
             robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -252,7 +252,7 @@ public class AutonomousCode extends LinearOpMode {
 
                 // Display drive status for the driver.
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
-                telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
+                telemetry.addData("Target",  "%7d:%7d",      newLeftFrontTarget,  newRightFrontTarget);
                 telemetry.addData("Actual",  "%7d:%7d:%7d:%7d",      robot.leftFront.getCurrentPosition(),
                         robot.rightFront.getCurrentPosition(),
                         robot.leftBack.getCurrentPosition(),
@@ -611,8 +611,7 @@ public class AutonomousCode extends LinearOpMode {
 
 
     public void strafe ( double speed,
-                            double distance) {
-        double  angle;
+                            double distance, double angle) {
         int     newLeftFrontTarget;
         int     newLeftBackTarget;
         int     newRightFrontTarget;
@@ -621,18 +620,17 @@ public class AutonomousCode extends LinearOpMode {
         double  max;
         double  error;
         double  steer;
-        double  leftSpeed;
-        double  rightSpeed;
+        double  backSpeed;
+        double  frontSpeed;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
             // Determine new target position, and pass to motor controller
-            angle = 0;
             moveCounts = (int)(distance * COUNTS_PER_INCH);
             newLeftFrontTarget = robot.leftFront.getCurrentPosition() + moveCounts;
             newLeftBackTarget = robot.leftBack.getCurrentPosition() - moveCounts;
-            newRightFrontTarget = robot.rightFront.getCurrentPosition() + moveCounts;
-            newRightBackTarget = robot.rightBack.getCurrentPosition() - moveCounts;
+            newRightFrontTarget = robot.rightFront.getCurrentPosition() - moveCounts;
+            newRightBackTarget = robot.rightBack.getCurrentPosition() + moveCounts;
 
             // Set Target and Turn On RUN_TO_POSITION
             robot.leftFront.setTargetPosition(newLeftFrontTarget);
@@ -648,8 +646,8 @@ public class AutonomousCode extends LinearOpMode {
             // start motion.
             speed = Range.clip(Math.abs(speed), 0.0, 1.0);
             robot.leftFront.setPower(speed);
-            robot.rightFront.setPower(speed);
-            robot.leftBack.setPower(speed);
+            robot.rightFront.setPower(-speed);
+            robot.leftBack.setPower(-speed);
             robot.rightBack.setPower(speed);
 
             // keep looping while we are still active, and BOTH motors are running.
@@ -657,28 +655,28 @@ public class AutonomousCode extends LinearOpMode {
                     (robot.leftFront.isBusy() && robot.rightFront.isBusy() && robot.leftBack.isBusy() && robot.rightBack.isBusy())) {
 
                 // adjust relative speed based on heading error.
-//                error = getError(angle);
-//                steer = getSteer(error, P_DRIVE_COEFF);
-//
-//                // if driving in reverse, the motor correction also needs to be reversed
-//                if (distance < 0)
-//                    steer *= -1.0;
-//
-//                leftSpeed = speed - steer;
-//                rightSpeed = -(speed + steer);
-//
-//                // Normalize speeds if either one exceeds +/- 1.0;
-//                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-//                if (max > 1.0)
-//                {
-//                    leftSpeed /= max;
-//                    rightSpeed /= max;
-//                }
-//
-//                robot.leftFront.setPower(leftSpeed);
-//                robot.rightFront.setPower(rightSpeed);
-//                robot.leftBack.setPower(rightSpeed);
-//                robot.rightBack.setPower(leftSpeed);
+                error = getError(angle);
+                steer = getSteer(error, P_DRIVE_COEFF);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distance < 0)
+                    steer *= -1.0;
+
+                frontSpeed = speed - steer;
+                backSpeed = -(speed + steer);
+
+                // Normalize speeds if either one exceeds +/- 1.0;
+                max = Math.max(Math.abs(backSpeed), Math.abs(frontSpeed));
+                if (max > 1.0)
+                {
+                    backSpeed /= max;
+                    frontSpeed /= max;
+                }
+
+                robot.leftFront.setPower(frontSpeed);
+                robot.rightFront.setPower(frontSpeed);
+                robot.leftBack.setPower(backSpeed);
+                robot.rightBack.setPower(backSpeed);
 
                 // Display drive status for the driver.
 //                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
