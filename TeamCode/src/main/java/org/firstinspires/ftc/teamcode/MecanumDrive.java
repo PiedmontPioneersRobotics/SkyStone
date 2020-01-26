@@ -58,8 +58,6 @@ public class MecanumDrive extends LinearOpMode {
     private int fineTune = 1;
 
 
-
-
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -93,11 +91,10 @@ public class MecanumDrive extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if (gamepad1.b || gamepad2.b){
-                if (fineTune == 3){
+            if (gamepad1.b || gamepad2.b) {
+                if (fineTune == 3) {
                     fineTune = 1;
-                }
-                else {
+                } else {
                     fineTune = 3;
                 }
             }
@@ -107,34 +104,35 @@ public class MecanumDrive extends LinearOpMode {
             // Setup a variable for each drive wheel to save power level for telemetry
             //Range.clip((()/fineTune), -1, 1)
             double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
-            double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI/4;
+            double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
             double rightX = gamepad1.right_stick_x;
-            final double leftFrontPower = Range.clip(((r * Math.cos(robotAngle) + rightX)/fineTune), -1, 1);
-            final double rightFrontPower = Range.clip(((r * Math.sin(robotAngle) - rightX)/fineTune), -1, 1);
-            final double leftBackPower = Range.clip(((r * Math.sin(robotAngle) + rightX)/fineTune), -1, 1);
-            final double rightBackPower = Range.clip(((r * Math.cos(robotAngle) - rightX)/fineTune), -1, 1);
+            final double leftFrontPower = Range.clip(((r * Math.cos(robotAngle) + rightX) / fineTune), -1, 1);
+            final double rightFrontPower = Range.clip(((r * Math.sin(robotAngle) - rightX) / fineTune), -1, 1);
+            final double leftBackPower = Range.clip(((r * Math.sin(robotAngle) + rightX) / fineTune), -1, 1);
+            final double rightBackPower = Range.clip(((r * Math.cos(robotAngle) - rightX) / fineTune), -1, 1);
             robot.leftFront.setPower(leftFrontPower);
             robot.rightFront.setPower(rightFrontPower);
             robot.leftBack.setPower(leftBackPower);
             robot.rightBack.setPower(rightBackPower);
-            if(gamepad2.left_trigger != 0) {
-                robot.grabber.setPower(0.6/fineTune);
-            } else if (gamepad2.right_trigger !=0){
-                robot.grabber.setPower(-0.6/fineTune);
+            //Useless Comment
+            if (gamepad2.left_trigger != 0) {
+         //       robot.grabber.setPower(0.6 / fineTune);
+            } else if (gamepad2.right_trigger != 0) {
+       //         robot.grabber.setPower(-0.6 / fineTune);
             } else {
-                robot.grabber.setPower(0);
+        //        robot.grabber.setPower(0);
             }
 
-            if(gamepad2.left_bumper){
-                robot.leftLifter.setPower(0.2/fineTune);
-                robot.rightLifter.setPower(0.2/fineTune);
-            } else if(gamepad2.right_bumper){
-                robot.leftLifter.setPower(-0.2/fineTune);
-                robot.rightLifter.setPower(-0.2/fineTune);
-            } else{
-                robot.leftLifter.setPower(0);
-                robot.rightLifter.setPower(0);
-            }
+//            if (gamepad2.left_bumper) {
+//                robot.leftLifter.setPower(0.2 / fineTune);
+//                robot.rightLifter.setPower(0.2 / fineTune);
+//            } else if (gamepad2.right_bumper) {
+//                robot.leftLifter.setPower(-0.2 / fineTune);
+//                robot.rightLifter.setPower(-0.2 / fineTune);
+//            } else {
+//                robot.leftLifter.setPower(0);
+//                robot.rightLifter.setPower(0);
+//            }
             /* uncomment to use servos
             if(gamepad2.left_bumper){//map to buttons when swapped to servos
                 if(robot.rightLifter.getPosition()==0) {
@@ -145,7 +143,15 @@ public class MecanumDrive extends LinearOpMode {
                     robot.rightLifter.setPosition(0);
                 }
             }
+
 */
+            if (gamepad2.y) {
+                robot.leftFoundation.setPosition(0);
+                robot.rightFoundation.setPosition(0.5);
+            } else if (gamepad2.a) {
+                robot.leftFoundation.setPosition(0.5);
+                robot.rightFoundation.setPosition(0);
+            }
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "leftFront (%.2f), rightFront (%.2f),", robot.leftFront.getPower(), robot.rightFront.getPower());

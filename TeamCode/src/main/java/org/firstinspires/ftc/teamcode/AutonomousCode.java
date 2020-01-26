@@ -119,7 +119,7 @@ public class AutonomousCode extends LinearOpMode {
 
         telemetry.log().clear(); telemetry.log().add("Gyro Calibrated. Press Start.");
         telemetry.clear(); telemetry.update();
-
+//useless code
         robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -132,7 +132,7 @@ public class AutonomousCode extends LinearOpMode {
         waitForStart();
         telemetry.log().clear();
 
-        int autoNum = 3;
+        int autoNum = 5;
 
         if (autoNum == 0) {
             /*
@@ -160,6 +160,25 @@ public class AutonomousCode extends LinearOpMode {
         } else if (autoNum == 3) {
             //strafe test
             strafe(DRIVE_SPEED, 20, 0);
+        } else if (autoNum == 4){
+            //go forward
+            //chompy arms go chomp
+            //go back
+
+            gyroDrive(DRIVE_SPEED, 40, 0);
+            moveFoundation(true);
+            gyroDrive(DRIVE_SPEED, -40, 0);
+            moveFoundation(false);
+            strafe(DRIVE_SPEED, -50, 0);
+        } else if (autoNum == 5){
+            gyroDrive(DRIVE_SPEED, 45, 0);
+            moveFoundation(true);
+            gyroDrive(DRIVE_SPEED, -45, 0);
+            gyroTurn(TURN_SPEED, -90);
+            gyroDrive(DRIVE_SPEED, 10, -90);
+            moveFoundation(false);
+            gyroDrive(DRIVE_SPEED, -60, -90);
+
         }
 
     }
@@ -540,9 +559,9 @@ public class AutonomousCode extends LinearOpMode {
     }
 
     public void runGrabbers(long duration, double speed){
-        robot.grabber.setPower(speed);
-        sleep(duration*1000);
-        robot.grabber.setPower(0);
+//        robot.grabber.setPower(speed);
+//        sleep(duration*1000);
+//        robot.grabber.setPower(0);
     }
 
     public void grabBlock(){
@@ -700,6 +719,16 @@ public class AutonomousCode extends LinearOpMode {
             robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    public void moveFoundation(boolean grab){
+        if (grab) {
+            robot.leftFoundation.setPosition(0.5);
+            robot.rightFoundation.setPosition(0);
+        } else {
+            robot.leftFoundation.setPosition(0.5);
+            robot.rightFoundation.setPosition(0);
         }
     }
 }
