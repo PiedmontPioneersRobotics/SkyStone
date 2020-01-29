@@ -59,8 +59,8 @@ public class Robot
     public DcMotor  leftBack   = null;
     public DcMotor  rightBack  = null;
    // public DcMotor  grabber   = null;
-   // public DcMotor  leftLifter = null;
-    //public DcMotor  rightLifter = null;
+    public Servo  leftLifter = null;
+    public Servo  rightLifter = null;
    // public DcMotor leftLifter = null;
     //public DcMotor rightLifter = null;
 
@@ -88,8 +88,8 @@ public class Robot
        // grabber = hwMap.get(DcMotor.class, "grabber");
 
         //Make Servos
-      //  leftLifter = hwMap.get(DcMotor.class, "left_lifter");
-        //rightLifter = hwMap.get(DcMotor.class, "right_lifter");
+        leftLifter = hwMap.get(Servo.class, "left_lifter");
+        rightLifter = hwMap.get(Servo.class, "right_lifter");
 
         leftFoundation = hwMap.get(Servo.class, "left_foundation");
         rightFoundation = hwMap.get(Servo.class, "right_foundation");

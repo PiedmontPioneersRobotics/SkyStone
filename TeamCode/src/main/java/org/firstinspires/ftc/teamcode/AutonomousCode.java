@@ -132,7 +132,13 @@ public class AutonomousCode extends LinearOpMode {
         waitForStart();
         telemetry.log().clear();
 
-        int autoNum = 5;
+//      Change to which version of the autonomous code to run
+        int autoNum = 3;
+        // 0 - Start facing towards bridge, Parks on tape close to wall
+        // 1 - Start facing towards bridge, Parks on tape close to neutral bridge. Works from building site side
+        // 2 - Start facing towards bridge, Parks on tape close to neutral bridge. Works from depot side
+        // 3 - Start facing toward foundation, Moves foundation, Parks on tape close to neutral bridge
+        // 4 - Start facing toward foundation, Moves foundation, Parks on tape close to wall
 
         if (autoNum == 0) {
             /*
@@ -141,43 +147,35 @@ public class AutonomousCode extends LinearOpMode {
              */
 
             gyroDrive(DRIVE_SPEED, 25, 0);
-        } else if(autoNum == 1){
-            /*
-            Drives forward 50 inches, turns -90 degrees (USE POSITIVE INSTEAD), drives forward
-            another 10 inches.
-             */
-            gyroDrive(DRIVE_SPEED, 80, 0);
-            gyroTurn(TURN_SPEED, 90);
-            gyroDrive(DRIVE_SPEED, 40, 90);
-
-        } else if(autoNum == 2){
-            /*
-             strafe sideways 40 in
-             move forward ---- cm slowly while yoinking
-
-             */
-//            strafe(0.2, 10);
-        } else if (autoNum == 3) {
-            //strafe test
+        } else if (autoNum == 1){
             strafe(DRIVE_SPEED, 20, 0);
-        } else if (autoNum == 4){
-            //go forward
-            //chompy arms go chomp
-            //go back
+            gyroDrive(DRIVE_SPEED, 25, 0);
 
-            gyroDrive(DRIVE_SPEED, 40, 0);
-            moveFoundation(true);
-            gyroDrive(DRIVE_SPEED, -40, 0);
+        } else if (autoNum == 2) {
+            strafe(DRIVE_SPEED, -20, 0);
+            gyroDrive(DRIVE_SPEED, 25, 0);
+        } else if (autoNum == 3){
+            //Move foundation, park closer to neutral bridge.
             moveFoundation(false);
-            strafe(DRIVE_SPEED, -50, 0);
-        } else if (autoNum == 5){
             gyroDrive(DRIVE_SPEED, 45, 0);
             moveFoundation(true);
             gyroDrive(DRIVE_SPEED, -45, 0);
             gyroTurn(TURN_SPEED, -90);
             gyroDrive(DRIVE_SPEED, 10, -90);
             moveFoundation(false);
-            gyroDrive(DRIVE_SPEED, -60, -90);
+            gyroDrive(DRIVE_SPEED, -50, -90);
+
+        }else if (autoNum == 4){
+            //Move foundation, park closer to edge
+            moveFoundation(false);
+            gyroDrive(DRIVE_SPEED, 45, 0);
+            moveFoundation(true);
+            gyroDrive(DRIVE_SPEED, -45, 0);
+            gyroTurn(TURN_SPEED, -90);
+            gyroDrive(DRIVE_SPEED, 10, -90);
+            moveFoundation(false);
+
+            gyroDrive(DRIVE_SPEED, -50, -90);
 
         }
 
@@ -727,8 +725,8 @@ public class AutonomousCode extends LinearOpMode {
             robot.leftFoundation.setPosition(0.5);
             robot.rightFoundation.setPosition(0);
         } else {
-            robot.leftFoundation.setPosition(0.5);
-            robot.rightFoundation.setPosition(0);
+            robot.leftFoundation.setPosition(0);
+            robot.rightFoundation.setPosition(0.5);
         }
     }
 }

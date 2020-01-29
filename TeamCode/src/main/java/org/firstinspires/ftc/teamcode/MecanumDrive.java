@@ -56,7 +56,7 @@ public class MecanumDrive extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private Robot robot = new Robot();
     private int fineTune = 1;
-
+    private boolean down = false;
 
     @Override
     public void runOpMode() {
@@ -88,7 +88,8 @@ public class MecanumDrive extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
+        robot.leftLifter.setPosition(0);
+        robot.rightLifter.setPosition(1);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             if (gamepad1.b || gamepad2.b) {
@@ -133,18 +134,20 @@ public class MecanumDrive extends LinearOpMode {
 //                robot.leftLifter.setPower(0);
 //                robot.rightLifter.setPower(0);
 //            }
-            /* uncomment to use servos
-            if(gamepad2.left_bumper){//map to buttons when swapped to servos
-                if(robot.rightLifter.getPosition()==0) {
-                    robot.leftLifter.setPosition(1);
-                    robot.rightLifter.setPosition(1);
-                }else if(robot.rightLifter.getPosition()==1){
-                    robot.leftLifter.setPosition(0);
-                    robot.rightLifter.setPosition(0);
-                }
+            // uncomment to use servos
+            while(gamepad2.left_bumper){//map to buttons when swapped to servos
+                double currPosLeft = robot.leftLifter.getPosition();
+                double currPosRight = robot.rightLifter.getPosition();
+                robot.leftLifter.setPosition(Range.clip((currPosLeft + 0.01), 0, 1));
+                robot.rightLifter.setPosition(Range.clip((currPosRight - 0.01), 0, 1));
+            }
+            while(gamepad2.right_bumper){
+                double currPosLeft = robot.leftLifter.getPosition();
+                double currPosRight = robot.rightLifter.getPosition();
+                robot.leftLifter.setPosition(Range.clip((currPosLeft - 0.01), 0, 1));
+                robot.rightLifter.setPosition(Range.clip((currPosRight + 0.01), 0, 1));
             }
 
-*/
             if (gamepad2.y) {
                 robot.leftFoundation.setPosition(0);
                 robot.rightFoundation.setPosition(0.5);
