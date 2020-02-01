@@ -88,8 +88,11 @@ public class MecanumDrive extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-        robot.leftLifter.setPosition(0);
-        robot.rightLifter.setPosition(1);
+        //Switch back after tests
+//        robot.leftLifter.setPosition(1);
+//        robot.rightLifter.setPosition(0);
+//        robot.leftLifterSec.setPosition(0.2);
+//        robot.rightLifterSec.setPosition(1);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             if (gamepad1.b || gamepad2.b) {
@@ -98,7 +101,7 @@ public class MecanumDrive extends LinearOpMode {
                 } else {
                     fineTune = 3;
                 }
-            }
+            }//not needed but usefull
             if (gamepad1.dpad_down) {
 
             }
@@ -117,46 +120,59 @@ public class MecanumDrive extends LinearOpMode {
             robot.rightBack.setPower(rightBackPower);
             //Useless Comment
             if (gamepad2.left_trigger != 0) {
-         //       robot.grabber.setPower(0.6 / fineTune);
+
+               //robot.rightGrabber.setPower(0.6 / fineTune);
+               //robot.leftGrabber.setPower(-0.6/fineTune);
+                robot.grabber.setPower(0.4/fineTune);
             } else if (gamepad2.right_trigger != 0) {
-       //         robot.grabber.setPower(-0.6 / fineTune);
+               //robot.leftGrabber.setPower(-0.6 / fineTune);
+               //robot.rightGrabber.setPower(0.6);
+                robot.grabber.setPower(-0.4/fineTune);
+
             } else {
-        //        robot.grabber.setPower(0);
+               //robot.leftGrabber.setPower(0);
+               //robot.rightGrabber.setPower(0);
+                robot.grabber.setPower(0);
             }
 
-//            if (gamepad2.left_bumper) {
-//                robot.leftLifter.setPower(0.2 / fineTune);
-//                robot.rightLifter.setPower(0.2 / fineTune);
-//            } else if (gamepad2.right_bumper) {
-//                robot.leftLifter.setPower(-0.2 / fineTune);
-//                robot.rightLifter.setPower(-0.2 / fineTune);
-//            } else {
-//                robot.leftLifter.setPower(0);
-//                robot.rightLifter.setPower(0);
-//            }
-            // uncomment to use servos
-            while(gamepad2.left_bumper){//map to buttons when swapped to servos
-                double currPosLeft = robot.leftLifter.getPosition();
-                double currPosRight = robot.rightLifter.getPosition();
-                robot.leftLifter.setPosition(Range.clip((currPosLeft + 0.01), 0, 1));
-                robot.rightLifter.setPosition(Range.clip((currPosRight - 0.01), 0, 1));
+            if (gamepad2.left_bumper) {
+                robot.leftLifter.setPower(-0.2 / fineTune);
+                robot.rightLifter.setPower(0.2 / fineTune);
+            } else if (gamepad2.right_bumper) {
+                robot.leftLifter.setPower(0.2 / fineTune);
+                robot.rightLifter.setPower(-0.2 / fineTune);
+            } else {
+                robot.leftLifter.setPower(0);
+                robot.rightLifter.setPower(0);
             }
-            while(gamepad2.right_bumper){
-                double currPosLeft = robot.leftLifter.getPosition();
-                double currPosRight = robot.rightLifter.getPosition();
-                robot.leftLifter.setPosition(Range.clip((currPosLeft - 0.01), 0, 1));
-                robot.rightLifter.setPosition(Range.clip((currPosRight + 0.01), 0, 1));
+            // uncomment to use servos
+//            while(gamepad2.left_bumper){//map to buttons when swapped to servos
+//                double currPosLeft = robot.leftLifter.getPosition();
+//                double currPosRight = robot.rightLifter.getPosition();
+//                robot.leftLifter.setPosition(Range.clip((currPosLeft + 0.01), 0, 1));
+//                robot.rightLifter.setPosition(Range.clip((currPosRight - 0.01), 0, 0));
+////                robot.leftLifterSec.setPosition(Range.clip((currPosLeft - 0.01), 0.2, 1));
+////                robot.rightLifterSec.setPosition(Range.clip((currPosRight + 0.01), 0.2, 1));
+//            }
+//            while(gamepad2.right_bumper){
+//                double currPosLeft = robot.leftLifter.getPosition();
+//                double currPosRight = robot.rightLifter.getPosition();
+//                robot.leftLifter.setPosition(Range.clip((currPosLeft - 0.01), 0, 1));
+//                robot.rightLifter.setPosition(Range.clip((currPosRight + 0.01), 0, 1));
+////                robot.leftLifterSec.setPosition(Range.clip((currPosLeft + 0.01), 0.2, 1));
+////                robot.rightLifterSec.setPosition(Range.clip((currPosRight - 0.01), 0.2, 1));
             }
 
             if (gamepad2.y) {
                 robot.leftFoundation.setPosition(0);
-                robot.rightFoundation.setPosition(0.5);
+                robot.rightFoundation.setPosition(1);
             } else if (gamepad2.a) {
-                robot.leftFoundation.setPosition(0.5);
+                robot.leftFoundation.setPosition(1);
                 robot.rightFoundation.setPosition(0);
             }
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+//            telemetry.addData("Left lifter", robot.leftLifter.getPosition());
             telemetry.addData("Motors", "leftFront (%.2f), rightFront (%.2f),", robot.leftFront.getPower(), robot.rightFront.getPower());
             telemetry.addData("Motors", "leftBack (%.2f), rightBack (%.2f),", robot.leftBack.getPower(), robot.rightBack.getPower());
             telemetry.addData("left front wheel", robot.leftFront.getCurrentPosition());
@@ -166,4 +182,4 @@ public class MecanumDrive extends LinearOpMode {
             telemetry.update();
         }
     }
-}
+

@@ -58,9 +58,13 @@ public class Robot
     public DcMotor  rightFront  = null;
     public DcMotor  leftBack   = null;
     public DcMotor  rightBack  = null;
-   // public DcMotor  grabber   = null;
-    public Servo  leftLifter = null;
-    public Servo  rightLifter = null;
+    public DcMotor  grabber   = null;
+    public DcMotor leftGrabber = null;
+    public DcMotor rightGrabber =  null;
+    public DcMotor  leftLifter = null;
+    public DcMotor  rightLifter = null;
+//    public Servo  leftLifterSec = null;
+//    public Servo  rightLifterSec = null;
    // public DcMotor leftLifter = null;
     //public DcMotor rightLifter = null;
 
@@ -85,11 +89,13 @@ public class Robot
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack  = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
-       // grabber = hwMap.get(DcMotor.class, "grabber");
+        grabber = hwMap.get(DcMotor.class, "grabber");
 
         //Make Servos
-        leftLifter = hwMap.get(Servo.class, "left_lifter");
-        rightLifter = hwMap.get(Servo.class, "right_lifter");
+        leftLifter = hwMap.get(DcMotor.class, "left_lifter");
+        rightLifter = hwMap.get(DcMotor.class, "right_lifter");
+//        leftLifterSec = hwMap.get(Servo.class, "left_lifter_secondary");
+//        rightLifterSec = hwMap.get(Servo.class, "right_lifter_secondary");
 
         leftFoundation = hwMap.get(Servo.class, "left_foundation");
         rightFoundation = hwMap.get(Servo.class, "right_foundation");
@@ -97,8 +103,8 @@ public class Robot
 
 
 
-//        leftGrabber    = hwMap.get(DcMotor.class, "left_grabber");
-//        rightGrabber    = hwMap.get(DcMotor.class, "right_grabber");
+        //leftGrabber    = hwMap.get(DcMotor.class, "left_grabber");
+        //rightGrabber    = hwMap.get(DcMotor.class, "right_grabber");
         leftFront.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightFront.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         leftBack.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
@@ -119,8 +125,9 @@ public class Robot
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
-//        leftGrabber.setPower(0);
-//        rightGrabber.setPower(0);
+        grabber.setPower(0);
+        //leftGrabber.setPower(0);
+       //rightGrabber.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -128,8 +135,8 @@ public class Robot
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        leftGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        rightGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       //leftGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       //rightGrabber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 

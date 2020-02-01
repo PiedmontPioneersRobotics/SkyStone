@@ -28,7 +28,7 @@
  */
 
 package org.firstinspires.ftc.teamcode;
-
+//useless typing
 import android.view.View;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -133,7 +133,7 @@ public class AutonomousCode extends LinearOpMode {
         telemetry.log().clear();
 
 //      Change to which version of the autonomous code to run
-        int autoNum = 3;
+        int autoNum = 1;
         // 0 - Start facing towards bridge, Parks on tape close to wall
         // 1 - Start facing towards bridge, Parks on tape close to neutral bridge. Works from building site side
         // 2 - Start facing towards bridge, Parks on tape close to neutral bridge. Works from depot side
@@ -145,7 +145,7 @@ public class AutonomousCode extends LinearOpMode {
             Drives forward 10 inches, use this for the parking.
             Uses Encoders and Gyro.
              */
-
+//useless comment
             gyroDrive(DRIVE_SPEED, 25, 0);
         } else if (autoNum == 1){
             strafe(DRIVE_SPEED, 20, 0);
@@ -157,9 +157,10 @@ public class AutonomousCode extends LinearOpMode {
         } else if (autoNum == 3){
             //Move foundation, park closer to neutral bridge.
             moveFoundation(false);
-            gyroDrive(DRIVE_SPEED, 45, 0);
+            gyroDrive(DRIVE_SPEED, 55, 0);
             moveFoundation(true);
-            gyroDrive(DRIVE_SPEED, -45, 0);
+            sleep(100);
+            gyroDrive(DRIVE_SPEED, -55, 0);
             gyroTurn(TURN_SPEED, -90);
             gyroDrive(DRIVE_SPEED, 10, -90);
             moveFoundation(false);
@@ -168,9 +169,10 @@ public class AutonomousCode extends LinearOpMode {
         }else if (autoNum == 4){
             //Move foundation, park closer to edge
             moveFoundation(false);
-            gyroDrive(DRIVE_SPEED, 45, 0);
+            gyroDrive(DRIVE_SPEED, 55, 0);
             moveFoundation(true);
-            gyroDrive(DRIVE_SPEED, -45, 0);
+            sleep(100);
+            gyroDrive(DRIVE_SPEED, -55, 0);
             gyroTurn(TURN_SPEED, -90);
             gyroDrive(DRIVE_SPEED, 10, -90);
             moveFoundation(false);
@@ -722,11 +724,11 @@ public class AutonomousCode extends LinearOpMode {
 
     public void moveFoundation(boolean grab){
         if (grab) {
-            robot.leftFoundation.setPosition(0.5);
-            robot.rightFoundation.setPosition(0);
-        } else {
             robot.leftFoundation.setPosition(0);
-            robot.rightFoundation.setPosition(0.5);
+            robot.rightFoundation.setPosition(1);
+        } else {
+            robot.leftFoundation.setPosition(1);
+            robot.rightFoundation.setPosition(0);
         }
     }
 }
